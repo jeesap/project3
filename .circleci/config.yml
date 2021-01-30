@@ -134,7 +134,7 @@ jobs:
           channel: C01KSJ6CHHU
           template: basic_fail_1
           
-    deploy-infrastructure:
+  deploy-infrastructure:
     docker:
       - image: amazon/aws-cli
     steps:
