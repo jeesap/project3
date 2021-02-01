@@ -203,16 +203,18 @@ jobs:
      
   configure-infrastructure:
     docker:
-      - image: python:3.7-alpine3.12 
+      - image: python:3.7-alpine3.12
+    executor: aws-cli/default  
     steps:
       - checkout
       - add_ssh_keys:
           fingerprints:
             - c5:de:4a:2b:2b:dc:7a:f8:45:ff:88:a9:3e:9f:2d:c9
       - attach_workspace:
-          at: /tmp
+          at: ~/
       - run:
           name: Install dependencies
+          working_directory: ./.circleci/ansible
           command: |
             apk add --update ansible
       - run:
@@ -234,7 +236,7 @@ jobs:
             echo TYPEORM_DATABASE=$TYPEORM_DATABASE >> "backend/.env"
             echo ~/project/backend/.env
             cd ~/project/.circleci/ansible
-            ansible-playbook -i /tmp/ansible/inventory.txt .circleci/ansible/configure-server.yml
+            ansible-playbook -i inventory.txt configure-server.yml
             pwd
             cat ~/project/backend/.env
       - destroy-environment:
