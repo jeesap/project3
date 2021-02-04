@@ -14,30 +14,24 @@
     cd /home/ubuntu/backend
     npm install -g npm@latest
 
-- name: Upgrade all apt packages
-  become: true
-  apt:
-    name: "*"
-    state: latest
-
-- name: "install package dependencies"
-  become: true
-  shell: |
-    cd /home/ubuntu/backend   
-    ls -la
-    npm install
+#- name: "install package dependencies"
+#  become: true
+#  shell: |
+#    cd /home/ubuntu/backend   
+#    ls -la
+#    npm install
     
-- name: "build package"
-  become: true
-  shell: |
-    cd /home/ubuntu/backend
-    npm run build
-    sudo cat .env
-    sudo npm run prestart:prod
+#- name: "build package"
+#  become: true
+#  shell: |
+#    cd /home/ubuntu/backend
+#    npm run build
+#    sudo cat .env
+#    sudo npm run prestart:prod
     
-- name: Executing node
-  become: true
-  shell: |
-    cd /home/ubuntu/backend
-    pm2 start npm --name backend -- start
-    pm2 ls
+#- name: Executing node
+#  become: true
+#  shell: |
+#    cd /home/ubuntu/backend
+#    pm2 start npm --name backend -- start
+#    pm2 ls
