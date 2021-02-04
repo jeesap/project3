@@ -293,7 +293,35 @@ jobs:
       - destroy-environment:
             workflow_id: ${CIRCLE_WORKFLOW_ID:0:7}
       - revert-migrations
-  
+
+  deploy-frontend:
+    docker:
+      - image: amazon/aws-cli
+    steps:
+      - checkout
+      - run:
+          name: Install dependencies
+          command: |
+            curl -sL https://rpm.nodesource.com/setup_lts.x | bash -
+            yum -y install nodejs
+            yum -y install tar gzip
+      - run:
+          name: Get backend url and deploy frontend objects
+          no_output_timeout: 30m
+          command: |
+            BACKEND_IP=$(curl -H "token: ${CIRCLE_WORKFLOW_ID:0:7}" --request GET https://api.memstash.io/values/backendip)
+            export API_URL="http://${BACKEND_IP}:3030"
+            echo "${API_URL}" >> "frontend/.env"
+            cat frontend/.env
+            cd frontend
+            npm install
+            npm run build
+            tar -czvf artifact-"${CIRCLE_WORKFLOW_ID:0:7}".tar.gz dist
+            aws s3 sync dist s3://udapeople-${CIRCLE_WORKFLOW_ID:0:7}
+      - destroy-environment:
+          workflow_id: ${CIRCLE_WORKFLOW_ID:0:7}
+      - revert-migrations
+
   
 workflows:
   default:
@@ -318,3 +346,9 @@ workflows:
           requires: [deploy-infrastructure]
       - run-migrations:
           requires: [configure-infrastructure]
+      - deploy-frontend:
+          requires: [run-migrations]
+          filters:
+            branches:
+              only:
+                - master
