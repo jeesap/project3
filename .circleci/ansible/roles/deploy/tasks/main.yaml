@@ -13,7 +13,13 @@
   shell: |
     cd /home/ubuntu/backend
     npm install -g npm@latest
-    
+
+- name: Upgrade all apt packages
+  become: true
+  apt:
+    name: "*"
+    state: latest
+
 - name: "install package dependencies"
   become: true
   shell: |
