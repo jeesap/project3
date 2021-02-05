@@ -29,7 +29,7 @@
 - name: "NPM install"
   command: npm install
   args:
-    chdir: /home/ubuntu
+    chdir: /home/ubuntu/backend
 
 
 #- name: "install package dependencies"
