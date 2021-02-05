@@ -14,12 +14,12 @@
     cd /home/ubuntu/backend
     npm install -g npm@latest
 
-#- name: "install package dependencies"
-#  become: true
-#  shell: |
-#    cd /home/ubuntu/backend   
-#    ls -la
-#    npm install
+- name: "install package dependencies"
+  become: true
+  shell: |
+    cd /home/ubuntu/backend   
+    ls -la
+    npm install
     
 #- name: "build package"
 #  become: true
