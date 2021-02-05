@@ -25,11 +25,18 @@
     cd /home/ubuntu/backend
     npm install -g npm@latest
 
-- name: "install package dependencies"
-  become: true
-  shell: |
-    cd /home/ubuntu/backend   
-    npm install
+
+- name: "NPM install"
+  command: npm install
+  args:
+    chdir: /home/ubuntu
+
+
+#- name: "install package dependencies"
+#  become: true
+#  shell: |
+#    cd /home/ubuntu/backend   
+#    npm install
     
 #- name: "build package"
 #  become: true
