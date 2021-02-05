@@ -378,7 +378,7 @@ jobs:
       - run:
           name: Frontend smoke test.
           command: |
-            URL="http://udapeople-${CIRCLE_WORKFLOW_ID}.s3-website-us-west-x.amazonaws.com"
+            URL="http://udapeople-${CIRCLE_WORKFLOW_ID_}.s3-website-us-west-2.amazonaws.com"
             if curl -s ${URL} | grep "Welcome"
             then
               return 1
