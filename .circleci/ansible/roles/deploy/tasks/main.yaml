@@ -18,7 +18,7 @@
   become: true
   shell: |
     cd /home/ubuntu/backend   
-    ls -la
+#    ls -la
     npm install
     
 #- name: "build package"
