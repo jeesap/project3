@@ -379,11 +379,14 @@ jobs:
           name: Frontend smoke test.
           command: |
             URL="http://udapeople-${CIRCLE_WORKFLOW_ID}.s3-website-us-west-2.amazonaws.com/#/jees"
+            echo ${URL}
             if curl -s ${URL} | grep "Welcome"
             then
-              return 1
+              echo "Frontend alive"
             else
-              return 0
+              echo "Debug Info Below"
+              url -vvv ${URL}
+              exit 1
             fi
       - destroy-environment:
           workflow_id: ${CIRCLE_WORKFLOW_ID:0:7}
