@@ -436,7 +436,38 @@ jobs:
       - destroy-environment:
           workflow_id: ${CIRCLE_WORKFLOW_ID:0:7}
       - revert-migrations
-  
+
+  cleanup:
+    docker:
+      - image: amazon/aws-cli
+    steps:
+      - checkout
+      - run:
+          name: Install dependencies
+          command: |
+            yum -y install tar 
+            yum -y install gzip
+      - attach_workspace:
+          at: .circleci/ansible/
+      - run:
+          name: Get Old Stack Workflow ID and Remove old stacks and files
+          command: |
+            originalWorkflowID=`cat ./.circleci/ansible/originalWorkflowID.txt`
+            echo $originalWorkflowID
+            if [ -n "$originalWorkflowID" ]
+            then
+              aws s3 rm s3://udapeople-$originalWorkflowID --recursive
+              aws s3 rb s3://udapeople-$originalWorkflowID --force
+              aws cloudformation delete-stack --stack-name udapeople-frontend-$originalWorkflowID
+              aws cloudformation delete-stack --stack-name udapeople-backend-$originalWorkflowID
+            else
+              echo "No old workflow exists"
+            fi 
+      - destroy-environment:
+          workflow_id: ${CIRCLE_WORKFLOW_ID:0:7}
+      - revert-migrations
+
+
 workflows:
   default:
     jobs:
@@ -476,3 +507,5 @@ workflows:
           requires: [deploy-backend, deploy-frontend]
       - cloudfront-update:
           requires: [smoke-test]
+      - cleanup:
+          requires: [cloudfront-update]
