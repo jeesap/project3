@@ -38,17 +38,17 @@
 #    cd /home/ubuntu/backend   
 #    npm install
     
-#- name: "build package"
-#  become: true
-#  shell: |
-#    cd /home/ubuntu/backend
-#    npm run build
-#    sudo cat .env
-#    sudo npm run prestart:prod
+- name: "build package"
+  become: true
+  shell: |
+    cd /home/ubuntu/backend
+    npm run build
+    sudo cat .env
+    sudo npm run prestart:prod
     
-#- name: Executing node
-#  become: true
-#  shell: |
-#    cd /home/ubuntu/backend
-#    pm2 start npm --name backend -- start
-#    pm2 ls
+- name: Executing node
+  become: true
+  shell: |
+    cd /home/ubuntu/backend
+    pm2 start npm --name backend -- start
+    pm2 ls
